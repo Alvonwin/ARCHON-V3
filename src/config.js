@@ -22,14 +22,14 @@ const IS_LOCAL = HOST === 'localhost';
 // Détecter si on est sur Vercel (ou autre plateforme distante)
 const isOnVercel = () => {
   return window.location.hostname.includes('vercel.app') ||
-         window.location.hostname.includes('loca.lt');
+         window.location.hostname.includes('ngrok');
 };
 
 // URL du Voice Platform
 const getVoiceBackendUrl = () => {
-  // Si on est sur Vercel, utiliser le tunnel public
+  // Si on est sur Vercel, utiliser le tunnel public ngrok
   if (isOnVercel()) {
-    return 'https://nasty-peas-nail.loca.lt';
+    return 'https://elena-draftier-sloppily.ngrok-free.dev';
   }
 
   // Sinon, utiliser l'hôte local/réseau
