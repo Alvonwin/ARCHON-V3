@@ -29,7 +29,7 @@ const isOnVercel = () => {
 const getVoiceBackendUrl = () => {
   // Si on est sur Vercel, utiliser le tunnel public
   if (isOnVercel()) {
-    return 'https://archon-voice.loca.lt';
+    return 'https://nasty-peas-nail.loca.lt';
   }
 
   // Sinon, utiliser l'hôte local/réseau
