@@ -17,6 +17,24 @@ const getHost = () => {
 };
 
 const HOST = getHost();
+const IS_LOCAL = HOST === 'localhost';
+
+// Détecter si on est sur Vercel (ou autre plateforme distante)
+const isOnVercel = () => {
+  return window.location.hostname.includes('vercel.app') ||
+         window.location.hostname.includes('loca.lt');
+};
+
+// URL du Voice Platform
+const getVoiceBackendUrl = () => {
+  // Si on est sur Vercel, utiliser le tunnel public
+  if (isOnVercel()) {
+    return 'https://archon-voice.loca.lt';
+  }
+
+  // Sinon, utiliser l'hôte local/réseau
+  return `http://${HOST}:5000`;
+};
 
 export const config = {
   // WebSocket Bridge (Saint Graal)
@@ -26,20 +44,23 @@ export const config = {
   BACKEND_URL: `http://${HOST}:3334`,
 
   // Backend TTS/STT (Voice Platform)
-  VOICE_BACKEND_URL: `http://${HOST}:5000`,
+  VOICE_BACKEND_URL: getVoiceBackendUrl(),
 
   // Ollama (toujours localhost pour sécurité)
   OLLAMA_URL: 'http://localhost:11434',
 
   // Environnement
-  IS_LOCAL: HOST === 'localhost',
+  IS_LOCAL: IS_LOCAL,
   HOST: HOST,
+  IS_VERCEL: isOnVercel(),
 };
 
 console.log('📡 [Config] ARCHON V3 Configuration:');
 console.log(`   - Host: ${config.HOST}`);
 console.log(`   - WebSocket: ${config.WS_BRIDGE_URL}`);
 console.log(`   - Backend: ${config.BACKEND_URL}`);
+console.log(`   - Voice Backend: ${config.VOICE_BACKEND_URL}`);
 console.log(`   - Local: ${config.IS_LOCAL}`);
+console.log(`   - Vercel: ${config.IS_VERCEL}`);
 
 export default config;
