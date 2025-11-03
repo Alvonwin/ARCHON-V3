@@ -25,26 +25,26 @@ const isOnVercel = () => {
          window.location.hostname.includes('ngrok');
 };
 
-// URL du Voice Platform
-const getVoiceBackendUrl = () => {
-  // Si on est sur Vercel, utiliser le tunnel public ngrok
+// URL du backend Claude Code (bridge HTTP)
+const getClaudeCodeUrl = () => {
+  // Si on est sur Vercel, utiliser le tunnel ngrok
   if (isOnVercel()) {
     return 'https://elena-draftier-sloppily.ngrok-free.dev';
   }
 
-  // Sinon, utiliser l'hôte local/réseau
-  return `http://${HOST}:5000`;
+  // Sinon, utiliser localhost
+  return 'http://localhost:3334';
 };
 
 export const config = {
-  // WebSocket Bridge (Saint Graal)
+  // WebSocket Bridge (Saint Graal) - pas utilisé en mode distant
   WS_BRIDGE_URL: `ws://${HOST}:8765`,
 
-  // Backend Claude Code
-  BACKEND_URL: `http://${HOST}:3334`,
+  // Backend Claude Code (HTTP Bridge)
+  BACKEND_URL: getClaudeCodeUrl(),
 
-  // Backend TTS/STT (Voice Platform)
-  VOICE_BACKEND_URL: getVoiceBackendUrl(),
+  // Backend TTS/STT (Voice Platform) - pas utilisé en mode texte uniquement
+  VOICE_BACKEND_URL: `http://${HOST}:5000`,
 
   // Ollama (toujours localhost pour sécurité)
   OLLAMA_URL: 'http://localhost:11434',
@@ -58,7 +58,7 @@ export const config = {
 console.log('📡 [Config] ARCHON V3 Configuration:');
 console.log(`   - Host: ${config.HOST}`);
 console.log(`   - WebSocket: ${config.WS_BRIDGE_URL}`);
-console.log(`   - Backend: ${config.BACKEND_URL}`);
+console.log(`   - Claude Code Backend: ${config.BACKEND_URL}`);
 console.log(`   - Voice Backend: ${config.VOICE_BACKEND_URL}`);
 console.log(`   - Local: ${config.IS_LOCAL}`);
 console.log(`   - Vercel: ${config.IS_VERCEL}`);
